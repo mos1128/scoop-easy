@@ -26,3 +26,5 @@ nul
 
 # App data
 .data/
+.claude/
+.ace-tool/

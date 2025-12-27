@@ -2,7 +2,10 @@
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import * as api from '../api'
+import { useScoopStore } from '../stores/scoop'
 import type { SearchResult } from '../types'
+
+const store = useScoopStore()
 
 const searchQuery = ref('')
 const results = ref<SearchResult[]>([])
@@ -32,8 +35,11 @@ async function handleSearch() {
 async function handleInstall(app: SearchResult) {
   installing.value = app.name
   try {
-    await api.installApp(app.name, app.version)
+    await api.installApp(app.bucket, app.name)
     ElMessage.success(`已安装 ${app.name}`)
+    if (!store.turboMode) {
+      await store.loadApps()
+    }
   } catch (e: unknown) {
     ElMessage.error('安装失败：' + (e instanceof Error ? e.message : String(e)))
   } finally {

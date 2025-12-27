@@ -209,8 +209,8 @@ async def get_operation_info(method: str, path: str, query_params: dict, body: d
 
         if path == "/api/apps/install":
             name = query_params.get("name", "")
-            version = body.get("version", "")
-            cmd = f"scoop install {name}@{version}" if version else f"scoop install {name}"
+            bucket = body.get("bucket", "")
+            cmd = f"scoop install {bucket}/{name}" if bucket else f"scoop install {name}"
             return ("安装应用", cmd)
 
         if path == "/api/buckets":

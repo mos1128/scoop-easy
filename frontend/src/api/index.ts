@@ -86,8 +86,8 @@ export async function searchApps(query: string): Promise<SearchResult[]> {
   return data
 }
 
-export async function installApp(name: string, version?: string): Promise<{ success: boolean; message: string }> {
-  const { data } = await api.post(`/apps/install`, { version: version || '' }, { params: { name } })
+export async function installApp(bucket: string, name: string): Promise<{ success: boolean; message: string }> {
+  const { data } = await api.post(`/apps/install`, { bucket }, { params: { name } })
   return data
 }
 
