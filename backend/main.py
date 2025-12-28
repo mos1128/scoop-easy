@@ -9,7 +9,8 @@ from typing import Optional
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, field_validator
 
 APP_NAME_PATTERN = re.compile(r'^[a-zA-Z0-9_\-\.]+$')
@@ -21,6 +22,7 @@ SEARCH_QUERY_PATTERN = re.compile(r'^[a-zA-Z0-9_\-\.\s]+$')
 DATA_DIR = Path(__file__).parent.parent / ".data"
 CONFIG_FILE = DATA_DIR / "config.json"
 LOG_DB_FILE = DATA_DIR / "logs.db"
+STATIC_DIR = Path(__file__).parent.parent / "frontend" / "dist"
 
 
 def get_scoop_dir() -> Path:
@@ -943,6 +945,18 @@ async def get_related_apps(name: str):
             ))
 
     return related
+
+
+# Mount static files for desktop mode (must be after all API routes)
+if STATIC_DIR.exists() and (STATIC_DIR / "index.html").exists():
+    app.mount("/assets", StaticFiles(directory=STATIC_DIR / "assets"), name="assets")
+
+    @app.get("/{path:path}")
+    async def serve_spa(path: str):
+        file_path = STATIC_DIR / path
+        if file_path.exists() and file_path.is_file():
+            return FileResponse(file_path)
+        return FileResponse(STATIC_DIR / "index.html")
 
 
 if __name__ == "__main__":

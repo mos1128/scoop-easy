@@ -33,29 +33,24 @@ cd scoop-easy
 ### 2. 安装依赖
 
 ```bash
-# 方式一：使用脚本（推荐）
 install.bat
-
-# 方式二：手动安装
-cd backend && uv sync && cd ..
-cd frontend && pnpm install && cd ..
 ```
 
-### 3. 启动服务
+### 3. 启动应用
+
+**桌面模式（推荐）**
 
 ```bash
-# 方式一：使用脚本（推荐）
-start-dev.bat
-
-# 方式二：手动启动
-# 终端1 - 后端
-cd backend && uv run python main.py
-
-# 终端2 - 前端
-cd frontend && pnpm dev
+start-desktop.bat
 ```
 
-### 4. 访问应用
+双击即可启动独立窗口应用，无需浏览器。
+
+**开发模式**
+
+```bash
+start-dev.bat
+```
 
 浏览器打开 http://localhost:5173
 
@@ -63,18 +58,20 @@ cd frontend && pnpm dev
 
 ```
 scoop-easy/
-├── backend/          # 后端 (FastAPI)
-│   ├── main.py       # API 入口
+├── backend/            # 后端 (FastAPI)
+│   ├── main.py         # API 入口
+│   ├── desktop.py      # 桌面模式入口
 │   └── pyproject.toml
-├── frontend/         # 前端 (Vue 3)
+├── frontend/           # 前端 (Vue 3)
 │   ├── src/
-│   │   ├── api/      # API 调用
+│   │   ├── api/        # API 调用
 │   │   ├── components/
-│   │   ├── stores/   # Pinia 状态管理
-│   │   └── types/    # TypeScript 类型
+│   │   ├── stores/     # Pinia 状态管理
+│   │   └── types/      # TypeScript 类型
 │   └── package.json
-├── install.bat       # 依赖安装脚本
-└── start-dev.bat     # 启动脚本
+├── install.bat         # 依赖安装脚本
+├── start-dev.bat       # 开发模式启动
+└── start-desktop.bat   # 桌面模式启动
 ```
 
 ## 技术栈
@@ -90,6 +87,7 @@ scoop-easy/
 - Python 3.10+
 - FastAPI
 - Pydantic
+- PyWebView (桌面模式)
 
 ## License
 
